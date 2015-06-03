@@ -1,2 +1,2 @@
-# Wechat-PHP-SDK
-Wechat PHP SDK
+# WeChat-PHP-SDK
+WeChat PHP SDK
