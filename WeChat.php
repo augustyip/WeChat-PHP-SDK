@@ -8,6 +8,7 @@
  */
 
 class WeChat {
+
   static $token = 'token';
 
   static function check_signature() {
@@ -37,6 +38,10 @@ class WeChat {
     return FALSE;
   }
 
+  /**
+   * Get request msg.
+   * @return Array
+   */
   static function get_request() {
 
     if (self::valid() && isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
@@ -46,8 +51,43 @@ class WeChat {
     return FALSE;
   }
 
-  static function send_response() {
-    
+
+  static function generate_response_xml($msg) {
+
+    $response = '<xml>';
+    print_r($msg);
+    self::generate_response_xml_items($msg, $response);
+    return $response .= '</xml>';
+  }
+
+  static function generate_response_xml_items($items, &$response) {
+
+    foreach ($items as $key => $value) {
+      if (is_array($value)) {
+        $response .= '<' . $key . '>';
+        self::generate_response_xml_items($value, $response);
+        $response .= '</' . $key . '>';
+      }
+      else {
+        $response .= '<' . $key . '><![CDATA[' . $value . ']]></' . $key . '>';
+      }
+    }
+  }
+
+  static function send_response($msg, $request = array()) {
+
+    $request = empty($request) ? self::get_request() : $request;
+
+    $default = array(
+      'ToUserName'   => $request['FromUserName'],
+      'FromUserName' => $request['ToUserName'],
+      'CreateTime' => time(),
+      'MsgType' => 'text',
+    );
+
+    $msg += $default;
+
+    print self::generate_response_xml($msg);
   }
 
 }
