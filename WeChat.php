@@ -55,7 +55,6 @@ class WeChat {
   static function generate_response_xml($msg) {
 
     $response = '<xml>';
-    print_r($msg);
     self::generate_response_xml_items($msg, $response);
     return $response .= '</xml>';
   }
