@@ -1,6 +1,6 @@
 # WeChat-PHP-SDK
 
-Usage
+Get request:
 
     $request = WeChat::get_request();
     $request: Array
@@ -12,3 +12,10 @@ Usage
         [Content] => text message.
         [MsgId] => 6156067910799000005
     )
+
+Send response:
+
+    $msg = array(
+        'Content' => 'bingo~',
+    );
+    WeChat::send_response($msg, $request);
