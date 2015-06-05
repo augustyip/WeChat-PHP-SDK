@@ -11,6 +11,11 @@ class WeChat {
 
   static $token = 'token';
 
+  /**
+   * Validate signature.
+   * 
+   * @return boolean
+   */
   static function check_signature() {
 
     if ( ! (isset($_GET['signature']) && isset($_GET['timestamp']) && isset($_GET['nonce']))) {
@@ -28,6 +33,11 @@ class WeChat {
     return sha1(implode($signature_array)) == $signature;
   }
 
+  /**
+   * Frist time access validate().
+   * 
+   * @return boolean
+   */
   static function valid() {
     if (self::check_signature()) {
       if (isset($_GET['echostr'])) {
@@ -39,8 +49,9 @@ class WeChat {
   }
 
   /**
-   * Get request msg.
-   * @return Array
+   * Get request message.
+   * 
+   * @return array
    */
   static function get_request() {
 
@@ -51,7 +62,12 @@ class WeChat {
     return FALSE;
   }
 
-
+  /**
+   * Generate the xml for response.
+   * 
+   * @param  array $msg
+   * @return string
+   */
   static function generate_response_xml($msg) {
 
     $response = '<xml>';
@@ -59,6 +75,13 @@ class WeChat {
     return $response .= '</xml>';
   }
 
+  /**
+   * Generate the xml items.
+   * 
+   * @param  array $items
+   * @param  string &$response
+   * @return string
+   */
   static function generate_response_xml_items($items, &$response) {
 
     foreach ($items as $key => $value) {
@@ -73,6 +96,11 @@ class WeChat {
     }
   }
 
+  /**
+   * Send response.
+   * @param  array $msg
+   * @param  array $request
+   */
   static function send_response($msg, $request = array()) {
 
     $request = empty($request) ? self::get_request() : $request;
